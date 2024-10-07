@@ -1,10 +1,13 @@
-export function subscribeOnBodlEvents(measurementId, consentModeEnabled) {
+export function subscribeOnBodlEvents(measurementId) {
   if (!window || typeof window.bodlEvents === 'undefined') {
     return;
   }
 
   function addDestination(payload) {
-    return Object.assign({}, payload, { send_to: measurementId });
+    return {
+      ...payload,
+      send_to: measurementId,
+    }
   }
 
   // See docs with appropriate fields for each event here

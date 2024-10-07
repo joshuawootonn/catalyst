@@ -71,10 +71,7 @@ export class Bodl {
       this.bindEvents();
 
       Bodl.waitForBodlEvents(() => {
-        subscribeOnBodlEvents(
-          this.config.googleAnalytics.id,
-          this.config.googleAnalytics.consentModeEnabled,
-        );
+        subscribeOnBodlEvents(this.config.googleAnalytics.id);
       });
     } catch (error) {
       // eslint-disable-next-line no-console
