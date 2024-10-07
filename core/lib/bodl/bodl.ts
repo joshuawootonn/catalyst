@@ -26,6 +26,7 @@ export class Bodl {
   readonly cart = this.getCartEvents();
   readonly navigation = this.getNavigationEvents();
   readonly consent = this.getConsentEvents();
+  readonly banner = this.getBannerEvents();
 
   private readonly bodlScriptId = 'bodl-events-script';
   private readonly dataLayerScriptId = 'data-layer-script';
@@ -161,6 +162,7 @@ export class Bodl {
 
   private bindEvents() {
     this.bindConsentEvents();
+    this.bindBannerEvents();
   }
 
   private getCartEvents() {
@@ -258,6 +260,34 @@ export class Bodl {
           ad_user_data: payload.advertising ? 'granted' : 'denied',
           analytics_storage: payload.analytics ? 'granted' : 'denied',
           functionality_storage: payload.functional ? 'granted' : 'denied',
+        });
+      });
+    });
+  }
+
+  private getBannerEvents() {
+    return {
+      bannerViewed: (payload) => {
+        Bodl.waitForBodlEvents(() => {
+          window.bodlEvents?.banner.emit('bodl_v1_view_banner', {
+            event_id: uuidv4(),
+            channel_id: this.config.channelId,
+            ...payload,
+          });
+        });
+      },
+    } satisfies Analytics.Banner.Events;
+  }
+
+  private bindBannerEvents() {
+    Bodl.waitForBodlEvents(() => {
+      window.bodlEvents?.banner.viewed((payload) => {
+        gtag('event', 'view_promotion', {
+          // The payload type doesn't match the expected type from emitting the event.
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          promotion_id: `banner_${payload.banner_id}`,
+          promotion_name: payload.banner_name,
+          send_to: this.config.googleAnalytics.id,
         });
       });
     });

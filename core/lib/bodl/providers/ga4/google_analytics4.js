@@ -266,34 +266,10 @@ export function subscribeOnBodlEvents(measurementId) {
     }
   }
 
-  function subscribeOnPromotionEvents() {
-    if (typeof window.bodlEvents.banner === 'undefined') {
-      return;
-    }
-
-    var GA_TO_BODL_PROMOTION_EVENTS = {
-      view: 'view_promotion',
-    };
-
-    function transformPromotionViewedPayload(payload) {
-      return addDestination({
-        promotion_id: 'banner_' + payload.banner_id,
-        promotion_name: payload.banner_name,
-      });
-    }
-
-    if (typeof window.bodlEvents.banner.viewed === 'function') {
-      window.bodlEvents.banner.viewed(function (payload) {
-        gtag('event', GA_TO_BODL_PROMOTION_EVENTS.view, transformPromotionViewedPayload(payload));
-      });
-    }
-  }
-
   function subscribeOnEcommerceEvents() {
     subscribeOnCheckoutEvents();
     subscribeOnCartEvents();
     subscribeOnProductEvents();
-    subscribeOnPromotionEvents();
   }
 
   subscribeOnEcommerceEvents();

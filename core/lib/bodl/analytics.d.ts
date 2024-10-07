@@ -92,4 +92,15 @@ declare namespace Analytics {
       consentUpdated: (payload: ConsentUpdatedPayload) => void;
     }
   }
+
+  export namespace Banner {
+    interface BannerViewedPayload {
+      banner_id: string;
+      banner_name: string;
+    }
+
+    export interface Events {
+      bannerViewed: (payload: BannerViewedPayload) => void;
+    }
+  }
 }
