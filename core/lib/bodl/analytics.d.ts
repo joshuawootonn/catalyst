@@ -27,9 +27,14 @@ declare namespace Analytics {
       line_items: Product[];
     }
 
+    interface SearchPayload {
+      search_term: string;
+    }
+
     export interface Events {
       categoryViewed: (payload: CategoryViewedPayload) => void;
       productViewed: (payload: ProductViewedPayload) => void;
+      search: (payload: SearchPayload) => void;
     }
   }
 

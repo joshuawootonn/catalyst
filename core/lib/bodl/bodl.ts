@@ -217,6 +217,15 @@ export class Bodl {
           });
         });
       },
+      search: (payload) => {
+        Bodl.waitForBodlEvents(() => {
+          window.bodlEvents?.product.emit('bodl_v1_keyword_search', {
+            event_id: uuidv4(),
+            channel_id: this.config.channelId,
+            ...payload,
+          });
+        });
+      },
     } satisfies Analytics.Navigation.Events;
   }
 
