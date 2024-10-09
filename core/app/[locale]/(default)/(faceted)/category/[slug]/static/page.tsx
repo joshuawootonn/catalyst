@@ -10,6 +10,8 @@ import { locales } from '~/i18n/routing';
 import { CategoryTreeFragment } from '../_components/sub-categories';
 import CategoryPage from '../page';
 
+export const runtime = 'edge';
+
 export default CategoryPage;
 
 export { generateMetadata } from '../page';

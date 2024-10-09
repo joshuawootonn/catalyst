@@ -9,6 +9,8 @@ import { locales } from '~/i18n/routing';
 
 import BrandPage from '../page';
 
+export const runtime = 'edge';
+
 export default BrandPage;
 
 export { generateMetadata } from '../page';

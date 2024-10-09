@@ -1,4 +1,5 @@
 // @ts-check
+const { setupDevPlatform } = require('@cloudflare/next-on-pages/next-dev');
 const createNextIntlPlugin = require('next-intl/plugin');
 
 const withNextIntl = createNextIntlPlugin();
@@ -71,6 +72,12 @@ if (process.env.ANALYZE === 'true') {
   const withBundleAnalyzer = require('@next/bundle-analyzer')();
 
   nextConfig = withBundleAnalyzer(nextConfig);
+}
+
+if (process.env.NODE_ENV === 'development') {
+  (async () => {
+    await setupDevPlatform();
+  })();
 }
 
 module.exports = nextConfig;

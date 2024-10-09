@@ -10,7 +10,10 @@
     "build:analyze": "ANALYZE=true npm run build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "pages:build": "dotenv -e ../.env.local -- npx @cloudflare/next-on-pages",
+    "preview": "pnpm run pages:build && wrangler pages dev",
+    "deploy": "pnpm run pages:build && wrangler pages deploy"    
   },
   "dependencies": {
     "@bigcommerce/catalyst-client": "workspace:^",
@@ -63,11 +66,13 @@
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.16",
     "@bigcommerce/eslint-config-catalyst": "workspace:^",
+    "@cloudflare/next-on-pages": "^1.13.5",
     "@faker-js/faker": "^9.0.3",
     "@gql.tada/cli-utils": "^1.6.3",
     "@next/bundle-analyzer": "^14.2.14",
     "@playwright/test": "^1.47.2",
     "@tailwindcss/container-queries": "^0.1.1",
+    "@types/eslint": "^9.6.1",
     "@types/gtag.js": "^0.0.20",
     "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20.16.10",
@@ -80,6 +85,7 @@
     "dotenv-cli": "^7.4.2",
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.14",
+    "eslint-plugin-next-on-pages": "^1.13.5",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",

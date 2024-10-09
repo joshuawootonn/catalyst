@@ -11,7 +11,9 @@ const config = {
     '@bigcommerce/catalyst/react',
     '@bigcommerce/catalyst/next',
     '@bigcommerce/catalyst/prettier',
+    'plugin:eslint-plugin-next-on-pages/recommended',
   ],
+  plugins: ['eslint-plugin-next-on-pages'],
   rules: {
     '@typescript-eslint/naming-convention': 'off',
     '@next/next/no-html-link-for-pages': 'off',

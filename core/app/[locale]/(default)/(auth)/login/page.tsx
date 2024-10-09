@@ -7,6 +7,8 @@ import { locales, LocaleType } from '~/i18n/routing';
 
 import { LoginForm } from './_components/login-form';
 
+export const runtime = 'edge';
+
 export async function generateMetadata() {
   const t = await getTranslations('Login');
 

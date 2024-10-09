@@ -2,6 +2,8 @@ import { locales } from '~/i18n/routing';
 
 import HomePage from '../page';
 
+export const runtime = 'edge';
+
 export default HomePage;
 
 export function generateStaticParams() {

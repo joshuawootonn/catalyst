@@ -17,7 +17,10 @@
     "dev": "dotenv -e .env.local -- turbo run dev",
     "build": "dotenv -e .env.local -- turbo run build",
     "lint": "turbo lint",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "pages:build": "dotenv -e .env.local -- pnpm --filter @bigcommerce/catalyst-core run pages:build",
+    "preview": "dotenv -e .env.local -- pnpm --filter @bigcommerce/catalyst-core run preview",
+    "deploy": "dotenv -e .env.local -- pnpm --filter @bigcommerce/catalyst-core run deploy"    
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",

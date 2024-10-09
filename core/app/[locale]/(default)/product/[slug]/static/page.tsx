@@ -10,6 +10,8 @@ import { locales } from '~/i18n/routing';
 
 import ProductPage from '../page';
 
+export const runtime = 'edge';
+
 export { generateMetadata } from '../page';
 export default ProductPage;
 

@@ -22,6 +22,8 @@ const StoreSelectorPageQuery = graphql(
   [StoreLogoFragment],
 );
 
+export const runtime = 'edge';
+
 export async function generateMetadata() {
   const t = await getTranslations('StoreSelector');
 
