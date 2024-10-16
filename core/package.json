@@ -44,7 +44,7 @@
     "lucide-react": "^0.452.0",
     "next": "15.0.0-rc.1",
     "next-auth": "5.0.0-beta.22",
-    "next-intl": "^3.21.1",
+    "next-intl": "3.5.4",
     "react": "19.0.0-rc-cd22717c-20241013",
     "react-day-picker": "^8.10.0",
     "react-dom": "19.0.0-rc-cd22717c-20241013",
@@ -71,8 +71,8 @@
     "@types/gtag.js": "^0.0.20",
     "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20.16.11",
-    "@types/react": "npm:types-react@19.0.0-rc.1",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
+    "@types/react": "npm:types-react@rc",
+    "@types/react-dom": "npm:types-react-dom@rc",
     "@types/react-google-recaptcha": "^2.1.9",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.20",
@@ -87,10 +87,8 @@
     "tailwindcss-animate": "1.0.7",
     "typescript": "^5.6.3"
   },
-  "pnpm": {
-    "overrides": {
-      "@types/react": "npm:types-react@19.0.0-rc.1",
-      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
-    }
+  "overrides": {
+    "@types/react": "npm:types-react@rc",
+    "@types/react-dom": "npm:types-react-dom@rc"
   }
 }

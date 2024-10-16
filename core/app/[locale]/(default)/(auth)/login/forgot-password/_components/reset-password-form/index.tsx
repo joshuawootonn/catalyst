@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import ReCaptcha from 'react-google-recaptcha';
+import type { ReCAPTCHA as ReCaptchaType } from 'react-google-recaptcha';
 
 import { useAccountStatusContext } from '~/app/[locale]/(default)/account/(tabs)/_components/account-status-provider';
 import { type FragmentOf } from '~/client/graphql';
@@ -58,7 +59,7 @@ export const ResetPasswordForm = ({ reCaptchaSettings }: Props) => {
   const [formStatus, setFormStatus] = useState<FormStatus | null>(null);
   const [isEmailValid, setIsEmailValid] = useState(true);
 
-  const reCaptchaRef = useRef<ReCaptcha>(null);
+  const reCaptchaRef = useRef<ReCaptchaType>(null);
   const [reCaptchaToken, setReCaptchaToken] = useState('');
   const [isReCaptchaValid, setReCaptchaValid] = useState(true);
   const { setAccountState } = useAccountStatusContext();
