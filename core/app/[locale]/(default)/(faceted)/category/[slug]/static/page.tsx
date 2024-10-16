@@ -12,7 +12,8 @@ import CategoryPage from '../page';
 
 export default CategoryPage;
 
-export { generateMetadata } from '../page';
+export { /* @next-codemod-error `generateMetadata` export is re-exported. Check if this component uses `params` or `searchParams`*/
+generateMetadata } from '../page';
 
 const CategoryTreeQuery = graphql(
   `

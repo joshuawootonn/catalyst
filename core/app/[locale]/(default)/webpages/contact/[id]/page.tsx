@@ -7,10 +7,11 @@ import { ContactUs } from './contact-us';
 import { getWebpageData } from './page-data';
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const data = await getWebpageData({ id: decodeURIComponent(params.id) });
   const webpage = data.node?.__typename === 'ContactPage' ? data.node : null;
 
@@ -27,7 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function WebPage({ params: { id } }: Props) {
+export default async function WebPage(props: Props) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const data = await getWebpageData({ id: decodeURIComponent(id) });
   const webpage = data.node?.__typename === 'ContactPage' ? data.node : null;
   const recaptchaSettings = data.site.settings?.reCaptcha;

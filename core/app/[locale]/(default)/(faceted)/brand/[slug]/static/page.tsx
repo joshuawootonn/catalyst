@@ -11,7 +11,8 @@ import BrandPage from '../page';
 
 export default BrandPage;
 
-export { generateMetadata } from '../page';
+export { /* @next-codemod-error `generateMetadata` export is re-exported. Check if this component uses `params` or `searchParams`*/
+generateMetadata } from '../page';
 
 const BrandsQuery = graphql(`
   query BrandsQuery($first: Int, $entityIds: [Int!]) {

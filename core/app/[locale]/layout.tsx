@@ -3,7 +3,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
-import { unstable_setRequestLocale } from 'next-intl/server';
+import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { PropsWithChildren } from 'react';
 
 import '../globals.css';
@@ -77,15 +77,25 @@ const VercelComponents = () => {
 };
 
 interface Props extends PropsWithChildren {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
-export default function RootLayout({ children, params: { locale } }: Props) {
+export default async function RootLayout(props: Props) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  const {
+    children
+  } = props;
+
   // need to call this method everywhere where static rendering is enabled
   // https://next-intl-docs.vercel.app/docs/getting-started/app-router#add-unstable_setrequestlocale-to-all-layouts-and-pages
   unstable_setRequestLocale(locale);
 
-  const messages = useMessages();
+  const messages = await getMessages();
 
   return (
     <html className={`${inter.variable} font-sans`} lang={locale}>

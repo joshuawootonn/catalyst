@@ -39,7 +39,7 @@ export async function updateItemQuantity({
   const customerId = await getSessionCustomerId();
 
   try {
-    const cartId = cookies().get('cartId')?.value;
+    const cartId = (await cookies()).get('cartId')?.value;
 
     if (!cartId) {
       return { status: 'error', error: 'No cartId cookie found' };

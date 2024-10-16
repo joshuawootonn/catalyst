@@ -1,5 +1,5 @@
 import { createClient } from '@bigcommerce/catalyst-client';
-import { headers } from 'next/headers';
+import { headers, type UnsafeUnwrappedHeaders } from 'next/headers';
 import { getLocale } from 'next-intl/server';
 
 import { getChannelIdFromLocale } from '~/channels.config';
@@ -40,7 +40,7 @@ export const client = createClient({
   },
   beforeRequest: (fetchOptions) => {
     if (fetchOptions?.cache && ['no-store', 'no-cache'].includes(fetchOptions.cache)) {
-      const ipAddress = headers().get('X-Forwarded-For');
+      const ipAddress = (headers() as unknown as UnsafeUnwrappedHeaders).get('X-Forwarded-For');
 
       if (ipAddress) {
         return {

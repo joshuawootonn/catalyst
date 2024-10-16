@@ -31,10 +31,16 @@ export async function generateMetadata() {
 }
 
 interface Props {
-  params: { locale: LocaleType };
+  params: Promise<{ locale: LocaleType }>;
 }
 
-export default async function StoreSelector({ params: { locale: selectedLocale } }: Props) {
+export default async function StoreSelector(props: Props) {
+  const params = await props.params;
+
+  const {
+    locale: selectedLocale
+  } = params;
+
   unstable_setRequestLocale(selectedLocale);
 
   const t = await getTranslations('StoreSelector');
@@ -45,28 +51,25 @@ export default async function StoreSelector({ params: { locale: selectedLocale }
 
   const storeSettings = data.site.settings;
 
-  return (
-    <>
-      <header className="flex h-[92px] items-center bg-white px-4 2xl:container sm:px-10 lg:gap-8 lg:px-12 2xl:mx-auto 2xl:px-0">
-        {storeSettings && (
-          <Link className="p-0" href="/">
-            <StoreLogo data={storeSettings} />
-          </Link>
-        )}
-      </header>
+  return (<>
+    <header className="flex h-[92px] items-center bg-white px-4 2xl:container sm:px-10 lg:gap-8 lg:px-12 2xl:mx-auto 2xl:px-0">
+      {storeSettings && (
+        <Link className="p-0" href="/">
+          <StoreLogo data={storeSettings} />
+        </Link>
+      )}
+    </header>
+    <div className="flex flex-col gap-2 px-4 lg:container sm:px-10 lg:mx-auto lg:max-w-[1000px] lg:px-12">
+      <h1 className="text-3xl font-black lg:text-4xl">{t('heading')}</h1>
 
-      <div className="flex flex-col gap-2 px-4 lg:container sm:px-10 lg:mx-auto lg:max-w-[1000px] lg:px-12">
-        <h1 className="text-3xl font-black lg:text-4xl">{t('heading')}</h1>
-
-        <div className="grid grid-cols-1 gap-6 py-6 md:grid-cols-3 md:gap-11 lg:grid-cols-4 lg:gap-8">
-          {locales.map((locale) => (
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            <LocaleLink key={locale} locale={locale} selected={selectedLocale === locale} />
-          ))}
-        </div>
+      <div className="grid grid-cols-1 gap-6 py-6 md:grid-cols-3 md:gap-11 lg:grid-cols-4 lg:gap-8">
+        {locales.map((locale) => (
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          (<LocaleLink key={locale} locale={locale} selected={selectedLocale === locale} />)
+        ))}
       </div>
-    </>
-  );
+    </div>
+  </>);
 }
 
 export function generateStaticParams() {

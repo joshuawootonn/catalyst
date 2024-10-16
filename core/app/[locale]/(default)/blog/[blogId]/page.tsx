@@ -10,12 +10,18 @@ import { SharingLinks } from './_components/sharing-links';
 import { getBlogPageData } from './page-data';
 
 interface Props {
-  params: {
+  params: Promise<{
     blogId: string;
-  };
+  }>;
 }
 
-export async function generateMetadata({ params: { blogId } }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    blogId
+  } = params;
+
   const data = await getBlogPageData({ entityId: Number(blogId) });
   const blogPost = data?.content.blog?.post;
 
@@ -32,7 +38,13 @@ export async function generateMetadata({ params: { blogId } }: Props): Promise<M
   };
 }
 
-export default async function Blog({ params: { blogId } }: Props) {
+export default async function Blog(props: Props) {
+  const params = await props.params;
+
+  const {
+    blogId
+  } = params;
+
   const format = await getFormatter();
 
   const data = await getBlogPageData({ entityId: Number(blogId) });

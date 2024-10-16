@@ -14,13 +14,14 @@ export async function generateMetadata() {
 }
 
 interface Props {
-  searchParams: {
+  searchParams: Promise<{
     c?: string;
     t?: string;
-  };
+  }>;
 }
 
-export default function ChangePassword({ searchParams }: Props) {
+export default async function ChangePassword(props: Props) {
+  const searchParams = await props.searchParams;
   const t = useTranslations('ChangePassword');
 
   const customerId = searchParams.c;

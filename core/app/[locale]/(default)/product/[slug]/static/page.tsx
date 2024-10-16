@@ -10,7 +10,8 @@ import { locales } from '~/i18n/routing';
 
 import ProductPage from '../page';
 
-export { generateMetadata } from '../page';
+export { /* @next-codemod-error `generateMetadata` export is re-exported. Check if this component uses `params` or `searchParams`*/
+generateMetadata } from '../page';
 export default ProductPage;
 
 const FeaturedProductsQuery = graphql(`

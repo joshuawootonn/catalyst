@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers';
+import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
 import NextAuth, { type DefaultSession, type NextAuthConfig } from 'next-auth';
 import 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -78,7 +78,7 @@ const config = {
   },
   events: {
     async signIn({ user }) {
-      const cookieCartId = cookies().get('cartId')?.value;
+      const cookieCartId = (cookies() as unknown as UnsafeUnwrappedCookies).get('cartId')?.value;
 
       if (cookieCartId && user.id) {
         try {
@@ -101,7 +101,7 @@ const config = {
       }
     },
     async signOut(message) {
-      const cookieCartId = cookies().get('cartId')?.value;
+      const cookieCartId = (cookies() as unknown as UnsafeUnwrappedCookies).get('cartId')?.value;
 
       const customerId = 'token' in message ? message.token?.id : null;
 

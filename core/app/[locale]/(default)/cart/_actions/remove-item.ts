@@ -29,7 +29,7 @@ export async function removeItem({
   const customerId = await getSessionCustomerId();
 
   try {
-    const cartId = cookies().get('cartId')?.value;
+    const cartId = (await cookies()).get('cartId')?.value;
 
     if (!cartId) {
       return { status: 'error', error: 'No cartId cookie found' };
@@ -57,7 +57,7 @@ export async function removeItem({
     // so we need to remove the cartId cookie
     // TODO: We need to figure out if it actually failed.
     if (!cart) {
-      cookies().delete('cartId');
+      (await cookies()).delete('cartId');
     }
 
     revalidateTag(TAGS.cart);

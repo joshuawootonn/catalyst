@@ -98,11 +98,17 @@ export async function generateMetadata() {
 }
 
 interface Props {
-  params: { slug: string };
-  searchParams: Record<string, string | string[] | undefined>;
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default async function Edit({ params: { slug } }: Props) {
+export default async function Edit(props: Props) {
+  const params = await props.params;
+
+  const {
+    slug
+  } = params;
+
   const t = await getTranslations('Account.Addresses.Edit');
 
   const customerId = await getSessionCustomerId();

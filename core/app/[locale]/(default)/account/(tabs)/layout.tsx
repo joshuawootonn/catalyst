@@ -11,10 +11,20 @@ const tabList = ['addresses', 'settings'] as const;
 export type TabType = (typeof tabList)[number];
 
 interface Props extends PropsWithChildren {
-  params: { locale: LocaleType; tab?: TabType };
+  params: Promise<{ locale: LocaleType; tab?: TabType }>;
 }
 
-export default function AccountTabLayout({ children, params: { locale } }: Props) {
+export default async function AccountTabLayout(props: Props) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  const {
+    children
+  } = props;
+
   unstable_setRequestLocale(locale);
 
   const t = useTranslations('Account.Home');

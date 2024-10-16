@@ -11,7 +11,7 @@ import { TAGS } from '~/client/tags';
 export const addToCart = async (data: FormData) => {
   const productEntityId = Number(data.get('product_id'));
 
-  const cartId = cookies().get('cartId')?.value;
+  const cartId = (await cookies()).get('cartId')?.value;
   let cart;
 
   try {
@@ -42,7 +42,7 @@ export const addToCart = async (data: FormData) => {
       return { status: 'error', error: 'Failed to add product to cart.' };
     }
 
-    cookies().set({
+    (await cookies()).set({
       name: 'cartId',
       value: cart.entityId,
       httpOnly: true,
