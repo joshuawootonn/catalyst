@@ -74,6 +74,21 @@ importers:
       '@radix-ui/react-tabs':
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tanstack/react-query':
+        specifier: ^5.59.15
+        version: 5.59.15(react@18.3.1)
+      '@trpc/client':
+        specifier: 11.0.0-rc.593
+        version: 11.0.0-rc.593(@trpc/server@11.0.0-rc.593)
+      '@trpc/next':
+        specifier: 11.0.0-rc.593
+        version: 11.0.0-rc.593(@tanstack/react-query@5.59.15(react@18.3.1))(@trpc/client@11.0.0-rc.593(@trpc/server@11.0.0-rc.593))(@trpc/react-query@11.0.0-rc.593(@tanstack/react-query@5.59.15(react@18.3.1))(@trpc/client@11.0.0-rc.593(@trpc/server@11.0.0-rc.593))(@trpc/server@11.0.0-rc.593)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/server@11.0.0-rc.593)(next@14.2.15(@playwright/test@1.48.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@trpc/react-query':
+        specifier: 11.0.0-rc.593
+        version: 11.0.0-rc.593(@tanstack/react-query@5.59.15(react@18.3.1))(@trpc/client@11.0.0-rc.593(@trpc/server@11.0.0-rc.593))(@trpc/server@11.0.0-rc.593)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@trpc/server':
+        specifier: 11.0.0-rc.593
+        version: 11.0.0-rc.593
       '@upstash/redis':
         specifier: ^1.34.3
         version: 1.34.3
@@ -261,7 +276,7 @@ importers:
     devDependencies:
       '@bigcommerce/eslint-config':
         specifier: ^2.9.1
-        version: 2.9.1(@types/eslint@9.6.1)(eslint@8.57.1)(jest@29.7.0(babel-plugin-macros@3.1.0))(typescript@5.6.3)
+        version: 2.9.1(@types/eslint@9.6.1)(eslint@8.57.1)(jest@29.7.0(@types/node@20.16.11)(babel-plugin-macros@3.1.0))(typescript@5.6.3)
       '@bigcommerce/eslint-config-catalyst':
         specifier: workspace:^
         version: link:../eslint-config-catalyst
@@ -337,7 +352,7 @@ importers:
     devDependencies:
       '@bigcommerce/eslint-config':
         specifier: ^2.9.1
-        version: 2.9.1(@types/eslint@9.6.1)(eslint@8.57.1)(jest@29.7.0(babel-plugin-macros@3.1.0))(typescript@5.6.3)
+        version: 2.9.1(@types/eslint@9.6.1)(eslint@8.57.1)(jest@29.7.0(@types/node@20.16.11)(babel-plugin-macros@3.1.0))(typescript@5.6.3)
       '@bigcommerce/eslint-config-catalyst':
         specifier: workspace:^
         version: link:../eslint-config-catalyst
@@ -2088,6 +2103,47 @@ packages:
     resolution: {integrity: sha512-p18dswChx6WnTSaJCSGx6lTmrGzNNvm2FtXmiO6AuA1V4U5REyoqwmT6kgAsIMdjo07QdAfYXHJ4hnMtfHzWgA==}
     peerDependencies:
       tailwindcss: '>=3.2.0'
+
+  '@tanstack/query-core@5.59.13':
+    resolution: {integrity: sha512-Oou0bBu/P8+oYjXsJQ11j+gcpLAMpqW42UlokQYEz4dE7+hOtVO9rVuolJKgEccqzvyFzqX4/zZWY+R/v1wVsQ==}
+
+  '@tanstack/react-query@5.59.15':
+    resolution: {integrity: sha512-QbVlAkTI78wB4Mqgf2RDmgC0AOiJqer2c5k9STOOSXGv1S6ZkY37r/6UpE8DbQ2Du0ohsdoXgFNEyv+4eDoPEw==}
+    peerDependencies:
+      react: ^18 || ^19
+
+  '@trpc/client@11.0.0-rc.593':
+    resolution: {integrity: sha512-uQORhYMwUeY4TluQmhl6N183BiLZz5mgIzBynkSWKxtQ7TIHt+3iRzTSiJH1jTl3SEOtCacRHS6b1yvFP2RJXw==}
+    peerDependencies:
+      '@trpc/server': 11.0.0-rc.593+f73cd3fd9
+
+  '@trpc/next@11.0.0-rc.593':
+    resolution: {integrity: sha512-uNaDYBwf69OfcKcgebezKdQoWgG3uF2iLyZbEAtkYCgQXbRmvkRpHxvJbR6oBYdEiJRxJhDXx9sm4kKcoOqK6w==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.59.15
+      '@trpc/client': 11.0.0-rc.593+f73cd3fd9
+      '@trpc/react-query': 11.0.0-rc.593+f73cd3fd9
+      '@trpc/server': 11.0.0-rc.593+f73cd3fd9
+      next: '*'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    peerDependenciesMeta:
+      '@tanstack/react-query':
+        optional: true
+      '@trpc/react-query':
+        optional: true
+
+  '@trpc/react-query@11.0.0-rc.593':
+    resolution: {integrity: sha512-T5abZpWKW+Ndk3SAGwXqRLnIXTpdiQd0OF5TqTGbE1RuAWVf6rOZJWSjxp0M16aypkc0uEDAUia912VnKhrOqA==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.59.15
+      '@trpc/client': 11.0.0-rc.593+f73cd3fd9
+      '@trpc/server': 11.0.0-rc.593+f73cd3fd9
+      react: '>=18.2.0'
+      react-dom: '>=18.2.0'
+
+  '@trpc/server@11.0.0-rc.593':
+    resolution: {integrity: sha512-ihZNf7nM3OriZkkuOUFjuB51FJdtCXZUUj8FIXkq0VXF9VmMOD7j4QTl5YojIzMTJBMGUK9VADcO0shgELEmyw==}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -6115,7 +6171,7 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@bigcommerce/eslint-config@2.9.1(@types/eslint@9.6.1)(eslint@8.57.1)(jest@29.7.0(babel-plugin-macros@3.1.0))(typescript@5.6.3)':
+  '@bigcommerce/eslint-config@2.9.1(@types/eslint@9.6.1)(eslint@8.57.1)(jest@29.7.0(@types/node@20.16.11)(babel-plugin-macros@3.1.0))(typescript@5.6.3)':
     dependencies:
       '@bigcommerce/eslint-plugin': 1.3.1(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3)
       '@rushstack/eslint-patch': 1.10.4
@@ -6127,7 +6183,38 @@ snapshots:
       eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0)(eslint@8.57.1)
       eslint-plugin-gettext: 1.2.0
       eslint-plugin-import: 2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1)
-      eslint-plugin-jest: 28.8.3(@typescript-eslint/eslint-plugin@8.4.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(jest@29.7.0(babel-plugin-macros@3.1.0))(typescript@5.6.3)
+      eslint-plugin-jest: 28.8.3(@typescript-eslint/eslint-plugin@8.4.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(jest@29.7.0(@types/node@20.16.11)(babel-plugin-macros@3.1.0))(typescript@5.6.3)
+      eslint-plugin-jest-formatting: 3.1.0(eslint@8.57.1)
+      eslint-plugin-jsdoc: 50.2.2(eslint@8.57.1)
+      eslint-plugin-jsx-a11y: 6.10.0(eslint@8.57.1)
+      eslint-plugin-prettier: 5.2.1(@types/eslint@9.6.1)(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.3.3)
+      eslint-plugin-react: 7.35.2(eslint@8.57.1)
+      eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
+      eslint-plugin-switch-case: 1.1.2
+      prettier: 3.3.3
+    optionalDependencies:
+      typescript: 5.6.3
+    transitivePeerDependencies:
+      - '@types/eslint'
+      - eslint-import-resolver-node
+      - eslint-import-resolver-webpack
+      - eslint-plugin-import-x
+      - jest
+      - supports-color
+
+  '@bigcommerce/eslint-config@2.9.1(@types/eslint@9.6.1)(eslint@8.57.1)(jest@29.7.0(babel-plugin-macros@3.1.0))(typescript@5.6.3)':
+    dependencies:
+      '@bigcommerce/eslint-plugin': 1.3.1(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3)
+      '@rushstack/eslint-patch': 1.10.4
+      '@stylistic/eslint-plugin': 2.7.2(eslint@8.57.1)(typescript@5.6.3)
+      '@typescript-eslint/eslint-plugin': 8.4.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3)
+      '@typescript-eslint/parser': 8.4.0(eslint@8.57.1)(typescript@5.6.3)
+      eslint: 8.57.1
+      eslint-config-prettier: 9.1.0(eslint@8.57.1)
+      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-plugin-gettext: 1.2.0
+      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-plugin-jest: 28.8.3(@typescript-eslint/eslint-plugin@8.4.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(jest@29.7.0(@types/node@20.16.11)(babel-plugin-macros@3.1.0))(typescript@5.6.3)
       eslint-plugin-jest-formatting: 3.1.0(eslint@8.57.1)
       eslint-plugin-jsdoc: 50.2.2(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.0(eslint@8.57.1)
@@ -7836,6 +7923,38 @@ snapshots:
     dependencies:
       tailwindcss: 3.4.13
 
+  '@tanstack/query-core@5.59.13': {}
+
+  '@tanstack/react-query@5.59.15(react@18.3.1)':
+    dependencies:
+      '@tanstack/query-core': 5.59.13
+      react: 18.3.1
+
+  '@trpc/client@11.0.0-rc.593(@trpc/server@11.0.0-rc.593)':
+    dependencies:
+      '@trpc/server': 11.0.0-rc.593
+
+  '@trpc/next@11.0.0-rc.593(@tanstack/react-query@5.59.15(react@18.3.1))(@trpc/client@11.0.0-rc.593(@trpc/server@11.0.0-rc.593))(@trpc/react-query@11.0.0-rc.593(@tanstack/react-query@5.59.15(react@18.3.1))(@trpc/client@11.0.0-rc.593(@trpc/server@11.0.0-rc.593))(@trpc/server@11.0.0-rc.593)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/server@11.0.0-rc.593)(next@14.2.15(@playwright/test@1.48.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@trpc/client': 11.0.0-rc.593(@trpc/server@11.0.0-rc.593)
+      '@trpc/server': 11.0.0-rc.593
+      next: 14.2.15(@playwright/test@1.48.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    optionalDependencies:
+      '@tanstack/react-query': 5.59.15(react@18.3.1)
+      '@trpc/react-query': 11.0.0-rc.593(@tanstack/react-query@5.59.15(react@18.3.1))(@trpc/client@11.0.0-rc.593(@trpc/server@11.0.0-rc.593))(@trpc/server@11.0.0-rc.593)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+
+  '@trpc/react-query@11.0.0-rc.593(@tanstack/react-query@5.59.15(react@18.3.1))(@trpc/client@11.0.0-rc.593(@trpc/server@11.0.0-rc.593))(@trpc/server@11.0.0-rc.593)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@tanstack/react-query': 5.59.15(react@18.3.1)
+      '@trpc/client': 11.0.0-rc.593(@trpc/server@11.0.0-rc.593)
+      '@trpc/server': 11.0.0-rc.593
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  '@trpc/server@11.0.0-rc.593': {}
+
   '@types/babel__core@7.20.5':
     dependencies:
       '@babel/parser': 7.24.7
@@ -9096,6 +9215,25 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
+  eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1):
+    dependencies:
+      '@nolyfill/is-core-module': 1.0.39
+      debug: 4.3.6
+      enhanced-resolve: 5.17.1
+      eslint: 8.57.1
+      eslint-module-utils: 2.9.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      fast-glob: 3.3.2
+      get-tsconfig: 4.8.0
+      is-bun-module: 1.1.0
+      is-glob: 4.0.3
+    optionalDependencies:
+      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+    transitivePeerDependencies:
+      - '@typescript-eslint/parser'
+      - eslint-import-resolver-node
+      - eslint-import-resolver-webpack
+      - supports-color
+
   eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0)(eslint@8.57.1):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
@@ -9126,6 +9264,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  eslint-module-utils@2.9.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
+    dependencies:
+      debug: 3.2.7
+    optionalDependencies:
+      '@typescript-eslint/parser': 8.4.0(eslint@8.57.1)(typescript@5.6.3)
+      eslint: 8.57.1
+      eslint-import-resolver-node: 0.3.9
+      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1)
+    transitivePeerDependencies:
+      - supports-color
+
   eslint-module-utils@2.9.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0)(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       debug: 3.2.7
@@ -9146,6 +9295,34 @@ snapshots:
   eslint-plugin-gettext@1.2.0:
     dependencies:
       gettext-parser: 4.2.0
+
+  eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
+    dependencies:
+      '@rtsao/scc': 1.1.0
+      array-includes: 3.1.8
+      array.prototype.findlastindex: 1.2.5
+      array.prototype.flat: 1.3.2
+      array.prototype.flatmap: 1.3.2
+      debug: 3.2.7
+      doctrine: 2.1.0
+      eslint: 8.57.1
+      eslint-import-resolver-node: 0.3.9
+      eslint-module-utils: 2.9.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      hasown: 2.0.2
+      is-core-module: 2.15.1
+      is-glob: 4.0.3
+      minimatch: 3.1.2
+      object.fromentries: 2.0.8
+      object.groupby: 1.0.3
+      object.values: 1.2.0
+      semver: 6.3.1
+      tsconfig-paths: 3.15.0
+    optionalDependencies:
+      '@typescript-eslint/parser': 8.4.0(eslint@8.57.1)(typescript@5.6.3)
+    transitivePeerDependencies:
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - supports-color
 
   eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1):
     dependencies:
@@ -9179,7 +9356,7 @@ snapshots:
     dependencies:
       eslint: 8.57.1
 
-  eslint-plugin-jest@28.8.3(@typescript-eslint/eslint-plugin@8.4.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(jest@29.7.0(babel-plugin-macros@3.1.0))(typescript@5.6.3):
+  eslint-plugin-jest@28.8.3(@typescript-eslint/eslint-plugin@8.4.0(@typescript-eslint/parser@8.4.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(jest@29.7.0(@types/node@20.16.11)(babel-plugin-macros@3.1.0))(typescript@5.6.3):
     dependencies:
       '@typescript-eslint/utils': 8.4.0(eslint@8.57.1)(typescript@5.6.3)
       eslint: 8.57.1

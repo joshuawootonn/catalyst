@@ -5,6 +5,7 @@ import { getSessionCustomerId } from '~/auth';
 import { client } from '~/client';
 import { graphql } from '~/client/graphql';
 import { revalidate } from '~/client/revalidate-target';
+import { LatestPost } from '~/components/post';
 import { ProductCardCarousel } from '~/components/product-card-carousel';
 import { ProductCardCarouselFragment } from '~/components/product-card-carousel/fragment';
 import { Slideshow } from '~/components/slideshow';
@@ -59,6 +60,8 @@ export default async function Home({ params: { locale } }: Props) {
   return (
     <>
       <Slideshow />
+
+      <LatestPost />
 
       <div className="my-10">
         <ProductCardCarousel
