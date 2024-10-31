@@ -13,6 +13,7 @@ import { Gallery } from './_components/gallery';
 import { ProductViewed } from './_components/product-viewed';
 import { RelatedProducts } from './_components/related-products';
 import { Reviews } from './_components/reviews';
+import { NewReview } from './_components/new-review';
 import { Warranty } from './_components/warranty';
 import { getProduct } from './page-data';
 
@@ -101,6 +102,7 @@ export default async function Product({ params: { locale, slug }, searchParams }
           <Warranty product={product} />
           <Suspense fallback={t('loading')}>
             <Reviews productId={product.entityId} />
+            <NewReview productEntityId={product.entityId} />
           </Suspense>
         </div>
       </div>
