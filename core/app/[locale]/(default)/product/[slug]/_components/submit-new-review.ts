@@ -1,16 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+'use server';
+
 import { z } from 'zod';
 import { client } from '~/client';
 import { graphql } from '~/client/graphql';
-import {getSessionCustomerId} from '~/auth';
+import { getSessionCustomerId } from '~/auth';
 
 const ReviewSchema = z.object({
   author: z.string(),
   email: z.string().email().optional(),
-  rating: z.number(),
+  rating: z.string(),
   text: z.string().trim(),
   title: z.string().trim(),
-  productEntityId: z.number(),
+  productEntityId: z.string(),
 });
 
 const SubmitNewReviewMutation = graphql(`
@@ -28,61 +29,52 @@ const SubmitNewReviewMutation = graphql(`
   }
 `);
 
-
-export const POST = async (request: NextRequest) => {
-    const customerId = await getSessionCustomerId();
-    console.log('customerId', customerId);
+export const submitNewReview = async (formData: FormData) => {
+  const customerId = await getSessionCustomerId();
+  console.log('customerId', customerId);
 
   try {
-    const body = await request.json();
-    const parsedData = ReviewSchema.parse(body);
+    const parsedData = ReviewSchema.parse(Object.fromEntries(formData.entries()));
 
     const req = {
       document: SubmitNewReviewMutation,
+      customerId,
       variables: {
         input: {
-          productEntityId: parsedData.productEntityId,
+          productEntityId: parseInt(parsedData.productEntityId, 10),
           review: {
             author: parsedData.author,
             email: parsedData.email,
-            rating: parsedData.rating,
+            rating: parseInt(parsedData.rating, 10),
             text: parsedData.text,
             title: parsedData.title,
           },
         },
       },
-      customerId,
     };
-    
-      console.log('req', req);
+
+    console.log('req', req);
+      
     const response = await client.fetch(req);
 
-    console.log('response', response);  
+    console.log('response', response);
     if (!response.data) {
-      return NextResponse.json({
-        status: 'error',
-        error: response,
-      });
+      return { status: 'error', error: response };
     }
 
     const result = response.data.catalog.addProductReview;
     if (result.errors && result.errors.length > 0) {
-      return NextResponse.json({
+      return {
         status: 'error',
         error: result.errors.map((error: { message: string }) => error.message).join('\n'),
-      });
+      };
     }
 
-    return NextResponse.json({ status: 'success', data: parsedData });
+    return { status: 'success', data: parsedData };
   } catch (error: unknown) {
     if (error instanceof Error || error instanceof z.ZodError) {
-      return NextResponse.json({
-        status: 'error',
-        error: error.message,
-      });
+      return { status: 'error', error: error.message };
     }
-    return NextResponse.json({ status: 'error', error: 'An unknown error occurred' });
+    return { status: 'error', error: 'An unknown error occurred' };
   }
 };
-
-export const runtime = 'edge';

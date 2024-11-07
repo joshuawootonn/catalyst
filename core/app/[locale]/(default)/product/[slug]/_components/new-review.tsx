@@ -4,7 +4,7 @@ import React, { useState, ChangeEvent } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { Button } from '~/components/ui/button';
-import { AtSign, CircleUser } from 'lucide-react';
+import { AtSign, CircleUser, MessageCircleMore } from 'lucide-react';
 import {
   Form,
   FormSubmit,
@@ -16,6 +16,12 @@ import {
   TextArea,
 } from '~/components/ui/form';
 import { Rating } from '~/components/ui/rating';
+
+import { submitNewReview } from './submit-new-review';
+
+interface Props {
+  productEntityId: number;
+}
 
 const Submit = () => {
   const { pending } = useFormStatus();
@@ -34,10 +40,6 @@ const Submit = () => {
   );
 };
 
-interface Props {
-  productEntityId: number;
-}
-
 export const NewReview = ({ productEntityId }: Props) => {
   const [formData, setFormData] = useState({
     author: '',
@@ -45,6 +47,7 @@ export const NewReview = ({ productEntityId }: Props) => {
     title: '',
     text: '',
     rating: 0,
+    productEntityId: productEntityId,
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -61,33 +64,33 @@ export const NewReview = ({ productEntityId }: Props) => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      console.log('Submitting review:', JSON.stringify({ ...formData, productEntityId }));
-      const response = await fetch('/api/submit-new-review', {
-        method: 'POST',
-        body: JSON.stringify({ ...formData, productEntityId }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+const onSubmit = async () => {
+  const formDataToSend = new FormData();
+  formDataToSend.append('author', formData.author);
+  formDataToSend.append('email', formData.email);
+  formDataToSend.append('title', formData.title);
+  formDataToSend.append('text', formData.text);
+  formDataToSend.append('rating', formData.rating.toString());
+  formDataToSend.append('productEntityId', formData.productEntityId.toString());
 
-      const result = await response.json();
-      if (result.status === 'success') {
-        console.log('Review submitted successfully:', result.data);
-      } else {
-        console.error('Error submitting review:', result.error);
-      }
-    } catch (error) {
-      console.error('Error submitting review:', error);
-    }
-  };
+  // Convert FormData to a plain object and ensure number types
+  const data: { [key: string]: any } = {};
+  formDataToSend.forEach((value, key) => {
+    data[key] = key === 'rating' || key === 'productEntityId' ? Number(value) : value;
+  });
+
+  // Now `data` has `rating` and `productEntityId` as numbers
+  const submit = await submitNewReview(formDataToSend);
+  console.log(submit);
+};
 
   return (
     <Form
       className="x-auto mb-10 mt-8 grid grid-cols-1 gap-y-6 lg:w-2/3 lg:grid-cols-2 lg:gap-x-6 lg:gap-y-2"
-      onSubmit={handleSubmit}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
     >
       <Field className="relative space-y-2 pb-7" name="author">
         <FieldLabel htmlFor="author" isRequired={true}>
@@ -127,7 +130,7 @@ export const NewReview = ({ productEntityId }: Props) => {
             type="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="Enter a email"
+            placeholder="Enter an email"
             error={formData.email === ''}
             required={true}
             icon={<AtSign />}
@@ -157,7 +160,7 @@ export const NewReview = ({ productEntityId }: Props) => {
             placeholder="Enter a title"
             error={formData.title === ''}
             required={true}
-            icon={<CircleUser />}
+            icon={<MessageCircleMore />}
           />
         </FieldControl>
         <div className="relative space-y-2 pb-7">
