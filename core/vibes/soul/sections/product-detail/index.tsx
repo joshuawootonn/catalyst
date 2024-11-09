@@ -55,7 +55,7 @@ export function ProductDetail<F extends Field>({ product, action, fields, breadc
             </div>
 
             {product.description != null && product.description !== '' && (
-              <p className="mb-6 text-contrast-500">{product.description}</p>
+              <div className="prose" dangerouslySetInnerHTML={{ __html: product.description }} />
             )}
 
             <ProductDetailForm action={action} fields={fields} productId={product.id} />

@@ -95,18 +95,6 @@ export default async function Product({ params: { locale, slug }, searchParams }
   // const category = removeEdgesAndNodes(product.categories).at(0);
 
   const accordions: AccordionItem[] = [
-    // Description - only if not null/empty
-    ...(product.description
-      ? [
-          {
-            title: t('Description.heading'),
-            content: (
-              <div className="prose" dangerouslySetInnerHTML={{ __html: product.description }} />
-            ),
-          },
-        ]
-      : []),
-
     // Additional Details - only if there are custom fields
     ...(product.customFields.edges?.length
       ? [
