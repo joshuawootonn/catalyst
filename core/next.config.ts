@@ -29,6 +29,20 @@ export default async (): Promise<NextConfig> => {
     experimental: {
       optimizePackageImports: ['@icons-pack/react-simple-icons'],
     },
+    images: {
+      remotePatterns: [
+        ...(process.env.MAKESWIFT_SITE_API_KEY
+          ? [
+              {
+                protocol: 'https',
+                hostname: 'storage.googleapis.com',
+                port: '',
+                pathname: '/**',
+              },
+            ]
+          : []),
+      ],
+    },
     typescript: {
       ignoreBuildErrors: !!process.env.CI,
     },
