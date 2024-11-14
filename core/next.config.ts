@@ -2,6 +2,7 @@ import bundleAnalyzer from '@next/bundle-analyzer';
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 import { optimize } from 'webpack';
+import createWithMakeswift from '@makeswift/runtime/next/plugin';
 
 import { writeBuildConfig } from './build-config/writer';
 import { client } from './client';
@@ -9,6 +10,7 @@ import { graphql } from './client/graphql';
 import { cspHeader } from './lib/content-security-policy';
 
 const withNextIntl = createNextIntlPlugin();
+const withMakeswift = createWithMakeswift({ previewMode: false });
 
 const LocaleQuery = graphql(`
   query LocaleQuery {
@@ -79,9 +81,10 @@ export default async (): Promise<NextConfig> => {
   // Apply withNextIntl to the config
   nextConfig = withNextIntl(nextConfig);
 
+  nextConfig = withMakeswift(nextConfig);
+
   if (process.env.ANALYZE === 'true') {
     const withBundleAnalyzer = bundleAnalyzer();
-
     nextConfig = withBundleAnalyzer(nextConfig);
   }
 
