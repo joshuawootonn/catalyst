@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
+
 import { StarEmptyIcon } from './star-icons/star-empty';
 import { StarFilledIcon } from './star-icons/star-filled';
 import { StarHalfIcon } from './star-icons/star-half';
@@ -42,10 +43,10 @@ const Rating = ({ className, rating, size = 24, onChange }: Props) => {
         <StarFilledIcon
           height={size}
           key={i}
-          width={size}
+          onClick={() => handleClick(i)}
           onMouseEnter={() => handleMouseEnter(i)}
           onMouseLeave={handleMouseLeave}
-          onClick={() => handleClick(i)}
+          width={size}
         />,
       );
     } else if (roundedRating - i > -1) {
@@ -53,10 +54,10 @@ const Rating = ({ className, rating, size = 24, onChange }: Props) => {
         <StarHalfIcon
           height={size}
           key={i}
-          width={size}
+          onClick={() => handleClick(i)}
           onMouseEnter={() => handleMouseEnter(i)}
           onMouseLeave={handleMouseLeave}
-          onClick={() => handleClick(i)}
+          width={size}
         />,
       );
     } else {
@@ -64,10 +65,10 @@ const Rating = ({ className, rating, size = 24, onChange }: Props) => {
         <StarEmptyIcon
           height={size}
           key={i}
-          width={size}
+          onClick={() => handleClick(i)}
           onMouseEnter={() => handleMouseEnter(i)}
           onMouseLeave={handleMouseLeave}
-          onClick={() => handleClick(i)}
+          width={size}
         />,
       );
     }

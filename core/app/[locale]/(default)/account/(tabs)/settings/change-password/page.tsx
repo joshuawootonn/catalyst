@@ -6,8 +6,6 @@ import { TabHeading } from '../../_components/tab-heading';
 
 import { ChangePasswordForm } from './_components/change-password-form';
 
-export const runtime = 'edge';
-
 export async function generateMetadata() {
   const t = await getTranslations('Account.Settings.ChangePassword');
 
