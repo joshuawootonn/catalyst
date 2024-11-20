@@ -1,10 +1,8 @@
-'use client';
+'use server';
 
-import Image from 'next/image';
+import { ClientBcImage } from './client';
 import { ComponentPropsWithRef } from 'react';
-
-import bcCdnImageLoader from '~/lib/cdn-image-loader';
-
+import Image from 'next/image';
 type NextImageProps = Omit<ComponentPropsWithRef<typeof Image>, 'quality'>;
 
 interface BcImageOptions {
@@ -13,22 +11,35 @@ interface BcImageOptions {
 
 type Props = NextImageProps & BcImageOptions;
 
-/**
- * This `<BcImage>` component is a wrapper for Next's `<Image>` component, designed to
- * specifically handle images that are served from the BigCommerce CDN. It makes the
- * assumption that it has been supplied with a `urlTemplate` field from GraphQL, which
- *  contains a `{:size}` placeholder that will be replaced with the appropriate width
- * and height values. It also adds a `compression` query parameter based on the `lossy`
- * prop, which defaults to `true`.
- *
- * This component can be used in place of Next's `Image` component for images from the
- * BigCommerce platform, which will reduce load on the Next.js application for image assets.
- *
- * This has been forked from the `Image` component to ensure the developer experience of
- * `Image` is unaffected for other use cases.
- *
- * @returns {React.ReactElement} The `<BcImage>` component
- */
-export const BcImage = ({ ...props }: Props) => {
-  return <Image loader={bcCdnImageLoader} {...props} />;
+const cdnHostname = process.env.BIGCOMMERCE_CDN_HOSTNAME ?? 'cdn11.bigcommerce.com';
+
+async function blobToBase64(blob: Blob) {
+  const arrayBuffer = await blob.arrayBuffer();
+  const uint8Array = new Uint8Array(arrayBuffer);
+  let binaryString = '';
+  for (let i = 0; i < uint8Array.byteLength; i++) {
+    binaryString += String.fromCharCode(uint8Array[i]);
+  }
+  return btoa(binaryString);
+}
+
+const lqipData = async (urlTemplate: string) => {
+  const url = urlTemplate.replace('{:size}', '10x10'); // get a tiny image
+  const response = await fetch(url, { cache: 'force-cache' }); // cache forever
+  const blob = await response.blob();
+  const base64 = await blobToBase64(blob);
+  return `data:${blob.type};base64,${base64}`;
+};
+
+export const BcImage = async ({ ...props }: Props) => {
+  if (props.src.startsWith(`https://${cdnHostname}`) && props.src.includes('{:size}')) {
+    if (props.priority) {
+      // priority implies no LQIP for things like logo
+      return <ClientBcImage {...props} />
+    }
+    // generate LQIP
+    const lqip = await lqipData(props.src);
+    return <ClientBcImage {...props} blurDataURL={lqip} placeholder="blur" />;
+  }
+  return <Image {...props} />;
 };
