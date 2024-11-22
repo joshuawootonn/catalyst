@@ -30,13 +30,10 @@ export function ProductsCarousel({
   return (
     <Carousel className={className}>
       <CarouselContent className="mb-10">
-        <Stream
-          fallback={<ProductsCarouselSkeleton className={className} />}
-          value={streamableProducts}
-        >
+        <Stream fallback={<ProductsCarouselSkeleton />} value={streamableProducts}>
           {(products) => {
             if (products.length === 0) {
-              return <ProductsCarouselSkeleton className={className} message={emptyStateMessage} />;
+              return <ProductsCarouselSkeleton message={emptyStateMessage} />;
             }
 
             return products.map((product) => (

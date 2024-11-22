@@ -1,6 +1,6 @@
 import { useFormatter } from 'next-intl';
 
-import { FeaturedProductsCarousel as FeaturedProductsCarouselComponent } from '@/vibes/soul/sections/featured-products-carousel';
+import { FeaturedProductsCarousel as FeaturedProductsCarouselSection } from '@/vibes/soul/sections/featured-products-carousel';
 import { ResultOf } from '~/client/graphql';
 import { pricesTransformer } from '~/data-transformers/prices-transformer';
 
@@ -37,5 +37,5 @@ export const FeaturedProductsCarousel = ({
     subtitle: product.brand?.name ?? undefined,
   }));
 
-  return <FeaturedProductsCarouselComponent products={formattedProducts} {...props} />;
+  return <FeaturedProductsCarouselSection products={formattedProducts} {...props} />;
 };

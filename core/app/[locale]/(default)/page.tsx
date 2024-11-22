@@ -1,6 +1,8 @@
 import { removeEdgesAndNodes } from '@bigcommerce/catalyst-client';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Suspense } from 'react';
 
+import { FeaturedProductsCarouselSkeleton } from '@/vibes/soul/sections/featured-products-carousel';
 import { getSessionCustomerAccessToken } from '~/auth';
 import { client } from '~/client';
 import { graphql } from '~/client/graphql';
@@ -75,19 +77,39 @@ export default async function Home({ params }: Props) {
         title={t('FeaturedProducts.title')}
       />
 
-      <FeaturedProductsCarousel
-        cta={{ label: t('NewestProducts.cta'), href: '/shop-all/?sort=newest' }}
-        description={t('NewestProducts.description')}
-        products={newestProducts}
-        title={t('NewestProducts.title')}
-      />
+      <Suspense
+        fallback={
+          <FeaturedProductsCarouselSkeleton
+            cta={{ label: t('NewestProducts.cta'), href: '/shop-all/?sort=newest' }}
+            description={t('NewestProducts.description')}
+            title={t('NewestProducts.title')}
+          />
+        }
+      >
+        <FeaturedProductsCarousel
+          cta={{ label: t('NewestProducts.cta'), href: '/shop-all/?sort=newest' }}
+          description={t('NewestProducts.description')}
+          products={newestProducts}
+          title={t('NewestProducts.title')}
+        />
+      </Suspense>
 
-      <FeaturedProductsCarousel
-        cta={{ label: t('BestSellingProducts.cta'), href: '/shop-all/?sort=best_selling' }}
-        description={t('BestSellingProducts.description')}
-        products={bestSellingProducts}
-        title={t('BestSellingProducts.title')}
-      />
+      <Suspense
+        fallback={
+          <FeaturedProductsCarouselSkeleton
+            cta={{ label: t('BestSellingProducts.cta'), href: '/shop-all/?sort=best_selling' }}
+            description={t('BestSellingProducts.description')}
+            title={t('BestSellingProducts.title')}
+          />
+        }
+      >
+        <FeaturedProductsCarousel
+          cta={{ label: t('BestSellingProducts.cta'), href: '/shop-all/?sort=best_selling' }}
+          description={t('BestSellingProducts.description')}
+          products={bestSellingProducts}
+          title={t('BestSellingProducts.title')}
+        />
+      </Suspense>
     </>
   );
 }
