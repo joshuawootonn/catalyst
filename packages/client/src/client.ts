@@ -1,7 +1,5 @@
-import { BigCommerceAPIError } from './error';
+import { GraphQLClient } from './graphql-client';
 import { DocumentDecoration } from './types';
-import { getOperationInfo } from './utils/getOperationName';
-import { normalizeQuery } from './utils/normalizeQuery';
 import { getBackendUserAgent } from './utils/userAgent';
 
 export const graphqlApiDomain: string =
@@ -38,105 +36,103 @@ interface BigCommerceResponse<T> {
   errors?: BigCommerceResponseError[];
 }
 
-class Client<FetcherRequestInit extends RequestInit = RequestInit> {
+class Client<FetcherRequestInit extends RequestInit = RequestInit> extends GraphQLClient {
   private backendUserAgent: string;
   private readonly defaultChannelId: string;
   private getChannelId: (defaultChannelId: string) => Promise<string> | string;
   private beforeRequest?: (
     fetchOptions?: FetcherRequestInit,
   ) => Promise<Partial<FetcherRequestInit> | undefined> | Partial<FetcherRequestInit> | undefined;
-
   private trustedProxySecret = process.env.BIGCOMMERCE_TRUSTED_PROXY_SECRET;
 
-  constructor(private config: Config<FetcherRequestInit>) {
-    if (!config.channelId) {
+  constructor(private clientConfig: Config<FetcherRequestInit>) {
+    if (!clientConfig.channelId) {
       throw new Error('Client configuration must include a channelId.');
     }
 
-    this.defaultChannelId = config.channelId;
-    this.backendUserAgent = getBackendUserAgent(config.platform, config.backendUserAgentExtensions);
-    this.getChannelId = config.getChannelId
-      ? config.getChannelId
+    const backendUserAgent = getBackendUserAgent(
+      clientConfig.platform,
+      clientConfig.backendUserAgentExtensions,
+    );
+
+    super({
+      graphqlEndpoint: async () => await this.getGraphQLEndpoint(),
+      logger: clientConfig.logger
+        ? ({ type, name, duration, response }) => {
+            const complexity = response.headers.get('x-bc-graphql-complexity');
+
+            // eslint-disable-next-line no-console
+            console.log(
+              `[BigCommerce] ${type} ${name ?? 'anonymous'} - ${duration}ms - complexity ${complexity ?? 'unknown'}`,
+            );
+          }
+        : undefined,
+      defaultFetchOptions: {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${clientConfig.storefrontToken}`,
+          'User-Agent': backendUserAgent,
+          ...(process.env.BIGCOMMERCE_TRUSTED_PROXY_SECRET && {
+            'X-BC-Trusted-Proxy-Secret': process.env.BIGCOMMERCE_TRUSTED_PROXY_SECRET,
+          }),
+        },
+      },
+    });
+
+    this.defaultChannelId = clientConfig.channelId;
+    this.backendUserAgent = backendUserAgent;
+    this.getChannelId = clientConfig.getChannelId
+      ? clientConfig.getChannelId
       : (defaultChannelId) => defaultChannelId;
-    this.beforeRequest = config.beforeRequest;
+    this.beforeRequest = clientConfig.beforeRequest;
   }
 
-  // Overload for documents that require variables
   async fetch<TResult, TVariables extends Record<string, unknown>>(config: {
     document: DocumentDecoration<TResult, TVariables>;
     variables: TVariables;
     customerAccessToken?: string;
     fetchOptions?: FetcherRequestInit;
     channelId?: string;
-  }): Promise<BigCommerceResponse<TResult>>;
-
-  // Overload for documents that do not require variables
-  async fetch<TResult>(config: {
-    document: DocumentDecoration<TResult, Record<string, never>>;
-    variables?: undefined;
-    customerAccessToken?: string;
-    fetchOptions?: FetcherRequestInit;
-    channelId?: string;
-  }): Promise<BigCommerceResponse<TResult>>;
-
-  async fetch<TResult, TVariables>({
-    document,
-    variables,
-    customerAccessToken,
-    fetchOptions = {} as FetcherRequestInit,
-    channelId,
-  }: {
-    document: DocumentDecoration<TResult, TVariables>;
-    variables?: TVariables;
-    customerAccessToken?: string;
-    fetchOptions?: FetcherRequestInit;
-    channelId?: string;
   }): Promise<BigCommerceResponse<TResult>> {
+    const {
+      document,
+      variables,
+      customerAccessToken,
+      fetchOptions = {} as FetcherRequestInit,
+      channelId,
+    } = config;
     const { headers = {}, ...rest } = fetchOptions;
-    const query = normalizeQuery(document);
-    const log = this.requestLogger(query);
 
-    const graphqlUrl = await this.getGraphQLEndpoint(channelId);
     const { headers: additionalFetchHeaders = {}, ...additionalFetchOptions } =
       (await this.beforeRequest?.(fetchOptions)) ?? {};
 
-    const response = await fetch(graphqlUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.config.storefrontToken}`,
-        'User-Agent': this.backendUserAgent,
-        ...(customerAccessToken && { 'X-Bc-Customer-Access-Token': customerAccessToken }),
-        ...(this.trustedProxySecret && { 'X-BC-Trusted-Proxy-Secret': this.trustedProxySecret }),
-        ...additionalFetchHeaders,
-        ...headers,
+    const response = await super.fetch({
+      document,
+      variables,
+      endpointOverride: channelId ? await this.getGraphQLEndpoint(channelId) : undefined,
+      fetchOptions: {
+        headers: {
+          ...(customerAccessToken && { 'X-Bc-Customer-Access-Token': customerAccessToken }),
+          ...additionalFetchHeaders,
+          ...headers,
+        },
+        ...additionalFetchOptions,
+        ...rest,
       },
-      body: JSON.stringify({
-        query,
-        ...(variables && { variables }),
-      }),
-      ...additionalFetchOptions,
-      ...rest,
     });
 
-    if (!response.ok) {
-      throw await BigCommerceAPIError.createFromResponse(response);
-    }
-
-    log(response);
-
-    return response.json() as Promise<BigCommerceResponse<TResult>>;
+    return response as BigCommerceResponse<TResult>;
   }
 
   async fetchShippingZones() {
     const response = await fetch(
-      `https://${adminApiHostname}/stores/${this.config.storeHash}/v2/shipping/zones`,
+      `https://${adminApiHostname}/stores/${this.clientConfig.storeHash}/v2/shipping/zones`,
       {
         method: 'GET',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          'X-Auth-Token': this.config.xAuthToken,
+          'X-Auth-Token': this.clientConfig.xAuthToken,
           'User-Agent': this.backendUserAgent,
         },
       },
@@ -172,35 +168,11 @@ class Client<FetcherRequestInit extends RequestInit = RequestInit> {
   private async getCanonicalUrl(channelId?: string) {
     const resolvedChannelId = channelId ?? (await this.getChannelId(this.defaultChannelId));
 
-    return `https://store-${this.config.storeHash}-${resolvedChannelId}.${graphqlApiDomain}`;
+    return `https://store-${this.clientConfig.storeHash}-${resolvedChannelId}.${graphqlApiDomain}`;
   }
 
   private async getGraphQLEndpoint(channelId?: string) {
     return `${await this.getCanonicalUrl(channelId)}/graphql`;
-  }
-
-  private requestLogger(document: string) {
-    if (!this.config.logger) {
-      return () => {
-        // noop
-      };
-    }
-
-    const { name, type } = getOperationInfo(document);
-
-    const timeStart = Date.now();
-
-    return (response: Response) => {
-      const timeEnd = Date.now();
-      const duration = timeEnd - timeStart;
-
-      const complexity = response.headers.get('x-bc-graphql-complexity');
-
-      // eslint-disable-next-line no-console
-      console.log(
-        `[BigCommerce] ${type} ${name ?? 'anonymous'} - ${duration}ms - complexity ${complexity ?? 'unknown'}`,
-      );
-    };
   }
 }
 
